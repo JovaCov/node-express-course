@@ -1,10 +1,34 @@
 const express = require('express');
 const app = express();
-const {products} = require('./data');
+let {products, people} = require('./data.js');
+const peopleRouter = require('./routes/people.js')
 
-app.use(express.static('./public'))
 
-app.get('/', (req,res) =>{
+app.use(logger);
+function logger(req, res, next) {
+    const url = req.url;
+    console.log(url);
+    console.log('log');
+    next();
+}
+
+app.use(express.static('./methods-public'))
+app.use(express.urlencoded({ extended: false }))
+app.use(express.json())
+app.use('/api/v1/people', peopleRouter)
+
+
+app.post('/login', (req, res) => {
+    const { name } = req.body
+    if (name) {
+      return res.status(200).send(`Welcome ${name}`)
+    }
+  
+    res.status(401).send('Please Provide Credentials')
+    
+})
+
+app.get('/', logger, (req,res) =>{
     res.send('<h1>HOme page</h1>')
 })
 app.get('/api/v1/test', (req,res) =>{
@@ -13,6 +37,7 @@ app.get('/api/v1/test', (req,res) =>{
 app.get('/api/v1/products', (req,res) =>{
     res.json(products)
 })
+
 app.get('/api/v1/products/:productID', (req,res)=>{
     const {productID} = req.params;
     const singleProduct = products.find((product) => product.id === Number(productID))
@@ -54,6 +79,8 @@ app.get('/api/v1/query', (req,res) =>{
     console.log(req.query);
     
 })
+
+
 
 
 app.all('*', (req, res) =>{
