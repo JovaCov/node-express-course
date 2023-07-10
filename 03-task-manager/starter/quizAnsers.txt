@@ -1,0 +1,4 @@
+1. In an express application middleware is used to communicated between layers of an application by modifying the request and responce object
+2. CRUD stands for Create, Read, Update, Delete/Destroy
+3.You can access the information in the .env file by using the dotenv library and the command proccess.env.<variableName> to store that value in a variable and us it in your code.
+    You can protect the contents of the env file by adding it to your .gitignore file so it wont get pushed to the repo
