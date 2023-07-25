@@ -3,7 +3,9 @@ const app = express()
 const tasks = require('./routess/task.js')
 const connectDB = require('./db/connect')
 require('dotenv').config()
-
+const notFound = require('./middleware/not-found.js')
+const errorHandlerMiddleWare = require('./middleware/error-handler.js')
+app.use(express.static('./public'))
 app.use(express.json())
 
 
@@ -13,7 +15,12 @@ app.get('/hello', (req,res) => {
 
 app.use('/api/v1/tasks', tasks)
 
-const port = 3000
+app.use(notFound)
+app.use(errorHandlerMiddleWare)
+
+
+
+const port = process.env.PORT || 3000
 
 const start = async () => {
     try {
